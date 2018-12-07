@@ -8,7 +8,7 @@ services:
   - docker
 
 install:
-  - npm run bootstrap
+  - npm install
 
 before_script:
   - sudo service mysql stop
