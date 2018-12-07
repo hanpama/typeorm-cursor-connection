@@ -2,8 +2,6 @@ import { Connection, ConnectionArguments, Edge } from '@girin/connection';
 import { MongoRepository } from 'typeorm';
 
 
-const bson = require('mongodb/lib/bulk/common').bson;
-
 export interface MongoEntityConnectionSortOption {
   fieldName: string;
   order: 1 | -1;
@@ -27,8 +25,12 @@ export class MongoEntityConnection<Entity extends Object> extends Connection<Ent
   protected beforeSelector?: Selector;
   protected selector: Selector;
 
+  protected bson: any;
+
   constructor(args: ConnectionArguments, public options: MongoEntityConnectionOptions<Entity>) {
     super(args);
+    this.bson = require('mongodb/lib/bulk/common').bson;
+
     if (args.first && args.last) {
       throw new Error('Argument "first" and "last" must not be included at the same time');
     }
@@ -68,7 +70,7 @@ export class MongoEntityConnection<Entity extends Object> extends Connection<Ent
 
   resolveCursor(item: Entity): string {
     const key = this.sortOptions.map(({ fieldName }) => item[fieldName as keyof Entity]);
-    return bson.serialize(key).toString('base64');
+    return this.bson.serialize(key).toString('base64');
   }
 
   resolveNode(item: Entity): Entity {
@@ -138,7 +140,7 @@ export class MongoEntityConnection<Entity extends Object> extends Connection<Ent
 
   protected explodeCursor(cursor: string): any[] {
     const buffer = Buffer.from(cursor, 'base64');
-    return bson.deserialize(buffer);
+    return this.bson.deserialize(buffer);
   }
 
   protected keyToSelector(key: any, direction: 'after' | 'before') {
