@@ -1,0 +1,21 @@
+sudo: required
+language: node_js
+node_js:
+  - '10'
+  - '9'
+  - '8'
+services:
+  - docker
+
+install:
+  - npm run bootstrap
+
+before_script:
+  - sudo service mysql stop
+  - sudo service postgresql stop
+  - docker-compose up -d
+
+script:
+  - npm run lint
+  - npm run test:ci
+  - npm run coverage:upload
