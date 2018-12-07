@@ -26,16 +26,16 @@
     "pretty": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "composite": true
+
+    "composite": true,
+    "noEmit": true
   },
   "references": [],
   "include": [
-    "src"
+    "src",
+    "tests"
   ],
   "exclude": [
-    "tests",
     "lib"
   ]
 }

@@ -41,8 +41,9 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "prepublish": "npm run build",
+    "lint": "tslint --project tslint.json src/**/*.ts",
     "test": "jest --verbose",
     "test:ci": "npm run coverage -- --ci",
     "coverage": "npm test -- --coverage",
