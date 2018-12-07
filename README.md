@@ -2,6 +2,10 @@
 
 Relay Cursor Connection implementations for TypeORM
 
+[![npm version](https://badge.fury.io/js/typeorm-cursor-connection.svg)](https://badge.fury.io/js/typeorm-cursor-connection)
+[![Build Status](https://travis-ci.org/hanpama/typeorm-cursor-connection.svg?branch=master)](https://travis-ci.org/hanpama/typeorm-cursor-connection)
+[![codecov](https://codecov.io/gh/hanpama/typeorm-cursor-connection/branch/master/graph/badge.svg)](https://codecov.io/gh/hanpama/typeorm-cursor-connection)
+
 
 ## EntityConnection
 
