@@ -1,5 +1,5 @@
 {
-  "name": "typeorm-cursor-connection",
+  "name": "@girin/typeorm-connection",
   "version": "0.5.2",
   "description": "Relay Cursor Connection implementations for TypeORM",
   "author": "Max Choi <hanpama@gmail.com>",
@@ -10,12 +10,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hanpama/typeorm-cursor-connection.git"
+    "url": "git+https://github.com/giringraphql/typeorm-connection.git"
   },
   "bugs": {
-    "url": "https://github.com/hanpama/typeorm-cursor-connection/issues"
+    "url": "https://github.com/giringraphql/typeorm-connection/issues"
   },
-  "homepage": "https://github.com/hanpama/typeorm-cursor-connection",
+  "homepage": "https://github.com/giringraphql/typeorm-connection",
   "license": "MIT",
   "peerDependencies": {
     "typeorm": "^0.2.9"
