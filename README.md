@@ -9,17 +9,17 @@ Relay Cursor Connection implementations for TypeORM
 
 ## EntityConnection
 
-Connection for querying multiple entities from `Repository`.
+Connection for querying multiple entities from `SelectQueryBuilder`.
+It paginates the `queryBuilder` with the connection arguments.
 
 ```ts
-export interface EntityConnectionOptions<TEntity> {
-    sortOptions: EntityConnectionSortOption[];
-    repository: Repository<TEntity>;
-    where?: (qb: SelectQueryBuilder<TEntity>) => any;
-}
 
 export declare class EntityConnection<TEntity extends Object> extends Connection<TEntity, TEntity> {
-    constructor(args: ConnectionArguments, options: EntityConnectionOptions<TEntity>);
+    constructor(
+      args: ConnectionArguments,
+      sortOptions: EntityConnectionSortOption[],
+      queryBuilder: SelectQueryBuilder<TEntity>
+    );
 }
 ```
 
@@ -69,11 +69,10 @@ Let's suppose we have a table of `Post`s.
 And we are querying the entities in the order we want.
 
 ```ts
-const postConnectionOrderedByTitle = new EntityConnection({
-  sortOptions: [
-    { sort: 'title', order: 'ASC' },
-  ],
-  repository: getRepository(Post),
+const postConnectionOrderedByTitle = new EntityConnection(
+  { first: 10 },
+  [{ sort: 'title', order: 'ASC' }],
+  getRepository(Post).createQueryBuilder(),
 })
 /*
                 cursor
@@ -95,13 +94,14 @@ So we take the approach of keeping cursor value is unique in the connection.
 In order to do that:
 
 ```ts
-const postConnectionOrderedByTitle = new EntityConnection({
-  sortOptions: [
+const postConnectionOrderedByTitle = new EntityConnection(
+  { first: 10 },
+  [
     { sort: 'title', order: 'ASC' },
     { sort: 'id', order: 'ASC' }
   ],
-  repository: getRepository(Post),
-})
+  getRepository(Post).createQueryBuilder(),
+)
 /*
      cursor[1]   cursor[0]
      --          --------
