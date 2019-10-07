@@ -1,5 +1,5 @@
 {
-  "name": "@girin/typeorm-connection",
+  "name": "typeorm-cursor-connection",
   "version": "0.6.0",
   "description": "Relay Cursor Connection implementations for TypeORM",
   "author": "Max Choi <hanpama@gmail.com>",
