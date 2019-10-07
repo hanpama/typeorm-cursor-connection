@@ -1,4 +1,4 @@
-import { SelectQueryBuilder, Brackets, Repository } from 'typeorm';
+import { SelectQueryBuilder, Brackets } from 'typeorm';
 import { Connection, ConnectionArguments, Edge } from '@girin/connection';
 
 
@@ -7,17 +7,8 @@ export interface EntityConnectionSortOption {
   order: 'ASC' | 'DESC';
 }
 
-export interface EntityConnectionOptions<TEntity> {
-  sortOptions: EntityConnectionSortOption[];
-  repository: Repository<TEntity>;
-  where?: (qb: SelectQueryBuilder<TEntity>) => any;
-}
-
 export class EntityConnection<TEntity extends Object> extends Connection<TEntity, TEntity> {
 
-  public get repository() { return this.options.repository; }
-  public get sortOptions() { return this.options.sortOptions; }
-  public get where() { return this.options.where; }
   protected get alias() { return 'node'; }
 
   protected limit?: number;
@@ -28,7 +19,8 @@ export class EntityConnection<TEntity extends Object> extends Connection<TEntity
 
   constructor(
     args: ConnectionArguments,
-    public options: EntityConnectionOptions<TEntity>,
+    public sortOptions: EntityConnectionSortOption[],
+    public queryBuilder: SelectQueryBuilder<TEntity>,
   ) {
     super(args);
     if (args.first && args.last) {
@@ -58,6 +50,10 @@ export class EntityConnection<TEntity extends Object> extends Connection<TEntity
     return item;
   }
 
+  createQueryBuilder(): SelectQueryBuilder<TEntity> {
+    return this.queryBuilder.clone();
+  }
+
   async resolveHasNextPage() {
     const { first, before } = this.args;
 
@@ -68,7 +64,7 @@ export class EntityConnection<TEntity extends Object> extends Connection<TEntity
     }
     if (typeof before === 'string') {
       const afterBeforeSelector = this.keyToSelector(this.beforeKey!, 'after');
-      const queryBuilder = this.repository.createQueryBuilder();
+      const queryBuilder = this.createQueryBuilder();
 
       const countAfterBefore = await queryBuilder.andWhere(afterBeforeSelector).getCount();
       return countAfterBefore > 0;
@@ -86,7 +82,7 @@ export class EntityConnection<TEntity extends Object> extends Connection<TEntity
     }
     if (typeof after === 'string') {
       const beforeAfterSelector = this.keyToSelector(this.afterKey!, 'before');
-      const queryBuilder = this.repository.createQueryBuilder();
+      const queryBuilder = this.createQueryBuilder();
       const countBeforeAfter = await queryBuilder.andWhere(beforeAfterSelector).limit(1).getCount();
       return countBeforeAfter > 0;
     }
@@ -128,8 +124,7 @@ export class EntityConnection<TEntity extends Object> extends Connection<TEntity
   protected queryPromise: Promise<TEntity[]> | null = null;
 
   createAppliedQueryBuilder() {
-    const queryBuilder = this.repository.createQueryBuilder();
-    if (this.where) { queryBuilder.andWhere(this.where); }
+    const queryBuilder = this.createQueryBuilder();
     if (this.afterSelector) { queryBuilder.andWhere(this.afterSelector); }
     if (this.beforeSelector) { queryBuilder.andWhere(this.beforeSelector); }
     return queryBuilder;

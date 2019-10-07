@@ -1,6 +1,6 @@
 {
   "name": "@girin/typeorm-connection",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Relay Cursor Connection implementations for TypeORM",
   "author": "Max Choi <hanpama@gmail.com>",
   "main": "./lib/index.js",
@@ -24,17 +24,18 @@
     "@girin/connection": "^0.5.2-alpha.0"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.10",
-    "mongodb": "^3.1.10",
-    "mysql": "^2.16.0",
-    "pg": "^7.6.1",
-    "sqlite3": "^4.0.4",
-    "typeorm": "^0.2.9",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.4",
-    "tslint": "^5.11.0",
-    "typescript": "^3.1.6",
-    "codecov": "^3.1.0"
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.11",
+    "codecov": "^3.6.1",
+    "jest": "^24.9.0",
+    "mongodb": "^3.3.2",
+    "mysql": "^2.17.1",
+    "pg": "^7.12.1",
+    "sqlite3": "^4.1.0",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "typeorm": "^0.2.19",
+    "typescript": "^3.6.3"
   },
   "files": [
     "lib",

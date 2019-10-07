@@ -56,13 +56,12 @@ describe('index connection', () => {
 
 
   function queryPostsOrderedById(dbConn: Connection, args: ConnectionArguments) {
-    const connection = new EntityConnection(args, {
-      repository: dbConn.getRepository(Post),
-      sortOptions: [
+    const connection = new EntityConnection(args, [
         { sort: 'id', order: 'ASC' },
         { sort: 'slug', order: 'ASC' },
       ],
-    });
+      dbConn.getRepository(Post).createQueryBuilder(),
+    );
     return connection;
   }
 
@@ -71,13 +70,11 @@ describe('index connection', () => {
     args: ConnectionArguments,
     category: string,
   ) {
-    return new EntityConnection(args, {
-      repository: dbConn.getRepository(Post),
-      sortOptions: [
-        { sort: 'id', order: 'ASC' },
-      ],
-      where: qb => qb.where('category = :category', { category }),
-    });
+    return new EntityConnection(
+      args,
+      [{ sort: 'id', order: 'ASC' }],
+      dbConn.getRepository(Post).createQueryBuilder().where('category = :category', { category }),
+    );
   }
 
   it('implements relay cursor connection spec', () => Promise.all(
